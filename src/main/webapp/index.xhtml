@@ -1,0 +1,190 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Monitora Catraca</title>
+        
+        <!-- 1 <b raw_pre="*" raw_post="*"> 60 </b> 60 (h x m x s ) = 3600 > 6 horas -->
+        <meta http-equiv="refresh" content="21600" />
+        
+        <style type="text/css">
+            .carousel .item {
+                height: 500px;
+            }
+
+            .carousel-inner > .item > img {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin: 0 auto;
+                height: 100%;
+            }
+        </style>
+
+        <script type="text/javascript">
+            /*<![CDATA[*/
+            function loadPage() {
+                location.reload();
+                var t = setTimeout(loadPage, 300000);
+            }
+
+            function startTime() {
+                var today = new Date();
+                var h = today.getHours();
+                var m = today.getMinutes();
+                var s = today.getSeconds();
+
+                var dia = today.getDay();
+                var mes = today.getMonth();
+                var ano = today.getFullYear();
+                m = checkTime(m);
+                s = checkTime(s);
+
+                dia = checkTime(dia);
+                mes = checkTime(mes);
+                document.getElementById('div_relogio').innerHTML = dia + "/" + mes + "/" + ano + " - " + h + ":" + m + ":" + s;
+                var t = setTimeout(startTime, 500);
+            }
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i
+                }
+                ;  // add zero in front of numbers < 10
+                return i;
+            }
+            /*]]>*/
+        </script>
+    </h:head>
+
+    <f:subview id="header">
+        <ui:include src="templates/header.xhtml"/>
+        <f:event type="preRenderView" listener="#{monitoraController.get_pagina}"/>
+    </f:subview>
+
+    <!-- <h:body onload="startTime()"> -->
+    <h:body>
+        <div class="container">
+            <h:form id="form_monitora">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h:commandLink style="width: 0; height: 0" id="btn_link">
+                            <f:ajax event="click" render="form_monitora:panel_monitor" listener="#{monitoraController.mostra_tela()}"/>
+                        </h:commandLink> 
+                    </div>
+                </div>
+
+                <h:panelGroup id="panel_monitor" layout="block" styleClass="row">
+                    <div class="col-lg-12">
+
+                        <div class="row">
+                            <div class="col-xs-7">
+                                <h5>Catraca <b>#{monitoraController.numeroPagina}</b> #{monitoraController.catraca.status}</h5>
+                            </div>
+
+                            <h:panelGroup layout="block" class="col-xs-5 text-right">
+                                <!-- hora <div id="div_relogio"></div> -->
+                                <h5>Data: <b> #{monitoraController.datahora()}</b></h5>
+                            </h:panelGroup>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel panel-default panel-shadow-effect">
+                                    <div class="panel-heading">
+                                        <h3 class="panel-title">Nome</h3>
+                                    </div>
+                                    <div class="panel-body" style="height: 70px">
+                                        <label style="font-weight: bold; font-size: 18pt">#{monitoraController.catraca.nome}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="panel" style="background: #{monitoraController.retornaPanelFoto()}; padding: 30px; height: 550px">
+                                    <h:graphicImage url="#{monitoraController.catraca.foto}" rendered="#{not empty monitoraController.catraca.foto}" styleClass="img-responsive img-thumbnail center-block panel-shadow-effect" style="width: auto; height: 500px"/>
+                                    <h:graphicImage value="/resources/img/sem_foto.png"      rendered="#{empty monitoraController.catraca.foto}" styleClass="img-responsive img-thumbnail center-block panel-shadow-effect" style="width: 400px"/>
+                                    <!-- desabilitado até a solução do ajax depois que passa o cartão -->
+                                    <h:panelGroup layout="block" rendered="false">
+                                        <h:panelGroup layout="block" id="carousel-example-generic" class="carousel slide">
+                                            <f:passThroughAttribute name="data-ride" value="carousel" />
+                                            <!-- Indicators -->
+                                            <ol class="carousel-indicators">
+                                                <li data-target="#carousel-example-generic" data-slide-to="0" class="active"></li>
+                                                <li data-target="#carousel-example-generic" data-slide-to="1"></li>
+                                                <li data-target="#carousel-example-generic" data-slide-to="2"></li>
+                                            </ol>
+
+                                            <!-- Wrapper for slides -->
+                                            <div class="carousel-inner" role="listbox">
+                                                <div class="item active">
+                                                    <h:graphicImage value="/resources/img/promocao1.jpg" style="width: 650px"/>
+                                                    <div class="carousel-caption">
+                                                        ...
+                                                    </div>
+                                                </div>
+                                                <div class="item">
+                                                    <h:graphicImage value="/resources/img/promocao2.jpg" style="width: 650px"/>
+                                                    <div class="carousel-caption">
+                                                        ...
+                                                    </div>
+                                                </div>
+                                                ...
+                                            </div>
+
+                                            <!-- Controls -->
+                                            <a class="left carousel-control" href="#carousel-example-generic" role="button" data-slide="prev">
+                                                <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                <span class="sr-only">Previous</span>
+                                            </a>
+                                            <a class="right carousel-control" href="#carousel-example-generic" role="button" data-slide="next">
+                                                <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                <span class="sr-only">Next</span>
+                                            </a>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                    <!-- <h:graphicImage url="http://200.152.187.241:8052/Sindical/resources/cliente/sindical/imagens/pessoa/48014/48014.jpg" /> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <label style="font-size: 21pt">#{monitoraController.catraca.mensagem}</label>
+                            </div>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </h:form>
+        </div>
+        <script type="text/javascript">
+            //var ws = new WebSocket("ws://localhost:8084/monitorCatraca/ws/monitora");
+            //var ws = new WebSocket("ws://192.168.1.108:8084/monitorCatraca/ws/monitora_# {monitoraController.numeroPagina}");
+            var ws = new WebSocket("#{monitoraController.caminhoPagina}");
+
+            ws.onopen = function (event) {
+                console.log("Connected ", event);
+            };
+
+            ws.onmessage = function (event) {
+                if (event.data === "ok") {
+                    document.getElementById("form_monitora:btn_link").click();
+                }
+            };
+
+            ws.onerror = function (event) {
+                console.log("Error ", event);
+            };
+
+            ws.onclose = function (event) {
+                console.log("Error ", event);
+            };
+        </script>
+    </h:body>
+</html>
+
