@@ -32,7 +32,7 @@ public class monitoraController implements Serializable {
     private String numeroPagina = "";
     private String caminhoPagina = "";
     private String cliente = "";
-    private String mac = "";
+    private String servidor = "";
 
     private ObjectCatraca catraca = new ObjectCatraca();
 
@@ -78,7 +78,7 @@ public class monitoraController implements Serializable {
                     + "  FROM soc_catraca_monitora cm \n"
                     + " INNER JOIN soc_catraca c ON c.id = cm.id_catraca \n"
                     + " WHERE c.nr_numero = " + numeroPagina
-                    + "   AND c.ds_mac = '" + mac + "'"
+                    + "   AND c.nr_servidor = '" + servidor + "'"
             );
 
             rs.next();
@@ -161,18 +161,17 @@ public class monitoraController implements Serializable {
     public String get_pagina() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-            if (request.getParameter("cliente") == null || request.getParameter("catraca") == null || request.getParameter("mac") == null) {
+            if (request.getParameter("cliente") == null || request.getParameter("catraca") == null || request.getParameter("servidor") == null) {
                 return "";
             }
 
             cliente = request.getParameter("cliente");
 
-            if ((!numeroPagina.equals(request.getParameter("catraca")) && !mac.equals(request.getParameter("mac"))) || caminhoPagina.isEmpty()) {
+            if (!numeroPagina.equals(request.getParameter("catraca")) && !servidor.equals(request.getParameter("servidor")) || caminhoPagina.isEmpty()) {
 
                 numeroPagina = request.getParameter("catraca");
 
-                mac = request.getParameter("mac");
-                mac = mac.replace("-", "_");
+                servidor = request.getParameter("servidor");
 
                 caminhoPagina = retornaCaminhoCliente(cliente);
                 mostra_tela();
@@ -187,19 +186,18 @@ public class monitoraController implements Serializable {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
             Integer n_catraca = null;
-            String macString = null;
+            String servidorString = null;
             if (request.getParameter("cliente") != null && request.getParameter("catraca") != null) {
                 n_catraca = Integer.valueOf(request.getParameter("catraca"));
             }
-            if (request.getParameter("mac") != null && !request.getParameter("mac").isEmpty()) {
-                macString = request.getParameter("mac");
+            if (request.getParameter("servidor") != null && !request.getParameter("servidor").isEmpty()) {
+                servidorString = request.getParameter("servidor");
             }
-            if (n_catraca != null && macString == null) {
+            if (n_catraca != null && servidorString == null) {
                 WSSocket.send(request.getParameter("cliente") + "_monitora_" + n_catraca, "ok");
             }
-            if (n_catraca != null && macString != null) {
-                macString = macString.replace("-", "_");
-                WSSocket.send(request.getParameter("cliente") + "_monitora_" + n_catraca + "_mac_" + macString, "ok");
+            if (n_catraca != null && servidorString != null) {
+                WSSocket.send(request.getParameter("cliente") + "_monitora_" + n_catraca + "_servidor_" + servidorString, "ok");
             }
         }
     }
@@ -210,11 +208,11 @@ public class monitoraController implements Serializable {
         def.loadJson();
         switch (cliente) {
             case "ComercioRP":
-                return "ws://" + def.getUrl_server() + "/monitorCatraca/ws/ComercioRP_monitora_" + numeroPagina + "_mac_" + mac;
+                return "ws://" + def.getUrl_server() + "/monitorCatraca/ws/ComercioRP_monitora_" + numeroPagina + "_servidor_" + servidor;
             case "Sindical":
-                return "ws://" + def.getUrl_server() + "/monitorCatraca/ws/Sindical_monitora_" + numeroPagina + "_mac_" + mac;
+                return "ws://" + def.getUrl_server() + "/monitorCatraca/ws/Sindical_monitora_" + numeroPagina + "_servidor_" + servidor;
             default:
-                return "ws://" + def.getUrl_server() + "/monitorCatraca/ws/" + cliente + "_monitora_" + numeroPagina + "_mac_" + mac;
+                return "ws://" + def.getUrl_server() + "/monitorCatraca/ws/" + cliente + "_monitora_" + numeroPagina + "_servidor_" + servidor;
         }
     }
 
