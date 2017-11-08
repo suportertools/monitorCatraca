@@ -78,7 +78,7 @@ public class monitoraController implements Serializable {
                     + "  FROM soc_catraca_monitora cm \n"
                     + " INNER JOIN soc_catraca c ON c.id = cm.id_catraca \n"
                     + " WHERE c.nr_numero = " + numeroPagina
-                    + "   AND c.nr_servidor = '" + servidor + "'"
+                    + "   AND c.nr_servidor = " + servidor + ""
             );
 
             rs.next();
