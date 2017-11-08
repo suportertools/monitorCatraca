@@ -75,13 +75,13 @@ public class DAO {
         }
     }
 
-    public void disconect() {
-        try {
-            getStatement().close();
-        } catch (SQLException ex) {
-            ex.getMessage();
-        }
-    }
+//    public void disconect() {
+//        try {
+//            getStatement().close();
+//        } catch (SQLException ex) {
+//            ex.getMessage();
+//        }
+//    }
 
     public ResultSet query(String qry) {
         try {
@@ -97,6 +97,7 @@ public class DAO {
     public void query_execute(String qry) {
         try {
             Integer x = getStatement().executeUpdate(qry);
+            getStatement().getConnection().close();
         } catch (SQLException e) {
             e.getMessage();
         }

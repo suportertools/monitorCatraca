@@ -66,8 +66,6 @@ public class retornoPessoaController implements Serializable {
                     facesContext.responseComplete();
                     return;
                 }
-                
-                rs.close();
             }
             WSRetorno ws = new WSRetorno(false, "Erro ao liberar Catraca");
             externalContext.getResponseOutputWriter().write(new JSONObject(ws).toString());
@@ -95,13 +93,23 @@ public class retornoPessoaController implements Serializable {
                 String cliente = request.getParameter("cliente");
                 String st_cartao = request.getParameter("cartao");
                 Integer nr_catraca = Integer.parseInt(request.getParameter("catraca"));
-
-                ResultSet rs = new DAO(cliente).query(
+                
+                new DAO(cliente).query_execute(
+                    "DELETE FROM soc_catraca_liberada WHERE ds_cartao = '" + st_cartao + "' AND id_catraca = " + nr_catraca + ";"
+                );
+                
+                new DAO(cliente).query_execute(
                         "INSERT INTO soc_catraca_liberada (ds_cartao, id_catraca) VALUES ('" + st_cartao + "', " + nr_catraca + "); \n"
                         + "SELECT setval('soc_catraca_liberada_id_seq', max(id)) FROM soc_catraca_liberada;"
                 );
                 
-                if (rs != null){
+                ResultSet rs = new DAO(cliente).query(
+                        "SELECT COUNT(*) AS qnt FROM soc_catraca_liberada WHERE ds_cartao = '" + st_cartao + "' AND id_catraca = " + nr_catraca + ";"
+                );
+                
+                rs.next();
+                
+                if (rs.getInt("qnt") > 0){
                     WSRetorno ws = new WSRetorno(true, "Catraca Liberada");
                     externalContext.getResponseOutputWriter().write(new JSONObject(ws).toString());
                     facesContext.responseComplete();
@@ -115,6 +123,8 @@ public class retornoPessoaController implements Serializable {
             WSRetorno ws = new WSRetorno(false, e.getMessage());
             externalContext.getResponseOutputWriter().write(new JSONObject(ws).toString());
             facesContext.responseComplete();
+        } catch (SQLException ex) {
+            Logger.getLogger(retornoPessoaController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 //    @Resource
