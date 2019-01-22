@@ -63,7 +63,7 @@ public class DAO {
                 conexao = "jdbc:postgresql://192.168.1.35:5432/ComercioRP";
                 con = DriverManager.getConnection(conexao, "postgres", "*4qu4r10-");
             } else {
-                conexao = "jdbc:postgresql://192.168.1.100:5432/" + cliente;
+                conexao = "jdbc:postgresql://sindical.rtools.com.br:5432/" + cliente;
                 con = DriverManager.getConnection(conexao, "postgres", "r#@tools");
             }
             

@@ -14,8 +14,12 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
@@ -148,7 +152,25 @@ public class monitoraController implements Serializable {
                     rs.getString("mensagem"),
                     rs.getBoolean("liberado")
             );
-        } catch (Exception e) {
+
+//            if (numeroPagina != null && servidor != null && !numeroPagina.isEmpty() && !servidor.isEmpty()) {
+//                try {
+//                    new Thread().sleep(2000);
+//                } catch (InterruptedException ex) {
+//                    Logger.getLogger(monitoraController.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//                Connection oConnect = db.getStatement().getConnection();
+//                String queryString = "UPDATE nr_pessoa = null, ds_foto =  null, ds_nome = null, dt_atualizacao = now(), ds_mensagem = null, nr_codigo_erro = null WHERE id IN (SELECT CM.id "
+//                        + "  FROM soc_catraca_monitora cm \n"
+//                        + " INNER JOIN soc_catraca c ON c.id = cm.id_catraca \n"
+//                        + " WHERE c.nr_numero = " + numeroPagina
+//                        + "   AND c.nr_servidor = " + servidor + ")";
+//                try (PreparedStatement ps = oConnect.prepareStatement(queryString)) {
+//                    Integer x = ps.executeUpdate();
+//                }
+//            }
+
+        } catch (SQLException e) {
             e.getMessage();
             catraca = new ObjectCatraca();
         }
