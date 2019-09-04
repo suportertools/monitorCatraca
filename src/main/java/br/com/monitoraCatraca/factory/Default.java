@@ -47,22 +47,22 @@ public class Default {
             JSONObject jSONObject = new JSONObject(json);
             try {
                 url_server = jSONObject.getString("url_server");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 e.getMessage();
             }
             try {
                 url_postgres = jSONObject.getString("url_postgres");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 e.getMessage();
             }
             try {
                 user_postgres = jSONObject.getString("user_postgres");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 e.getMessage();
             }
             try {
                 pass_postgres = jSONObject.getString("pass_postgres");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 e.getMessage();
             }
         } catch (JSONException ex) {

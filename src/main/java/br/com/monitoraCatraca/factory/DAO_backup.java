@@ -6,12 +6,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class DAO {
+public class DAO_backup {
 
     private Statement statement;
     private Boolean conectado;
 
-    public DAO(String cliente) {
+    public DAO_backup(String cliente) {
         switch (cliente) {
             case "ComercioRP":
                 conectaComercioRP();
@@ -60,11 +60,11 @@ public class DAO {
             Class.forName("org.postgresql.Driver");
             
             if (cliente.equals("Sindical")) {
-                conexao = "jdbc:postgresql://192.168.1.35:5432/ComercioRP";
+                conexao = "jdbc:postgresql://192.168.15.35:5432/ComercioRP";
                 con = DriverManager.getConnection(conexao, "postgres", "*4qu4r10-");
             } else {
-                conexao = "jdbc:postgresql://192.168.1.100:5432/" + cliente;
-                con = DriverManager.getConnection(conexao, "postgres", "r#@tools");
+                conexao = "jdbc:postgresql://192.168.15.100:5432/" + cliente;
+                con = DriverManager.getConnection(conexao, "postgres", "sisrt**ls989899#@");
             }
             
             statement = con.createStatement();

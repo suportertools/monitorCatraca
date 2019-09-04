@@ -21,7 +21,7 @@
     </servlet-mapping>
     
     <welcome-file-list>
-        <welcome-file>index.xhtml</welcome-file>
+        <welcome-file>index2.xhtml</welcome-file>
     </welcome-file-list>
     
     <session-config>
@@ -29,4 +29,10 @@
             -1
         </session-timeout>
     </session-config>
+    
+    <error-page>
+        <error-code>404</error-code>
+        <location>/erroServidor.xhtml</location>
+    </error-page>
+
 </web-app>
