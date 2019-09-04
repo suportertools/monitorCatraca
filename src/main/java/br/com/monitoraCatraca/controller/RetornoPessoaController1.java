@@ -24,7 +24,7 @@ import org.json.JSONObject;
  */
 @ManagedBean
 @RequestScoped
-public class RetornoPessoaController implements Serializable {
+public class RetornoPessoaController1 implements Serializable {
 
     @Resource
     WebServiceContext wsContext;
